@@ -1,13 +1,20 @@
 print "Представьтесь пожалуйста. Введите ваше имя: "
-name = gets.chomp.capitalize!							#вводим имя пользователя
 
+#вводим имя пользователя
+name = gets.chomp.capitalize!							
+
+#вводим значение роста
 print "И ваш рост: "
-growth = Integer(gets.chomp)							#вводим значение роста
+growth = gets.chomp.to_i							
 
-ideal_weight = growth - 110 							#вычисляем идеальный вес
+#вычисляем идеальный вес
+ideal_weight = growth - 110 							
 
-puts ideal_weight > 0 ? "Уважаемый #{name}, ваш идеальный вес равен: #{ideal_weight}" :
-						"Ваш вес уже оптимальный!"
+#выводим результат
+if ideal_weight > 0
+  puts "Уважаемый #{name}, ваш идеальный вес равен: #{ideal_weight}"
+else
+  "Ваш вес уже оптимальный!"
+end
 
-							#используя тернарный оператор if выводим результат
-
+							

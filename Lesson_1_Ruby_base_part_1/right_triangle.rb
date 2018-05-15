@@ -1,18 +1,21 @@
 puts "Поочередно введите значения каждой из сторон треугольника: "
-a = Integer(gets.chomp)
-b = Integer(gets.chomp)
-c = Integer(gets.chomp)
+a = gets.chomp.to_f
+b = gets.chomp.to_f
+c = gets.chomp.to_f
 
 triangle = [a, b, c]
 puts "Треугольник равнобедренный" if a == b || a == c || b == c	
-puts "Треугольник равносторонний" if a == b && a == c											
-gipotenuza = triangle.max ** 2														#Вычисляем гипотенузы перед удалением её из массива
-triangle.delete(triangle.max)														#Удаляем максимальный элемент массива
-puts gipotenuza == triangle.collect! {|i| i**2}.sum ? "Треугольник прямоугольный"   #Проверяем является ли треугольник прямоугольным по теореме пифагора
-												: "Треугольник не прямоугольный"
+puts "Треугольник равносторонний" if a == b && a == c	
 
+#Находим самую длинную из сторон треугольника, удаляем ее значение из массива и 
+#возводим значение предполагаемой гипотенузы в квадрат.																				
+gipotenuza = triangle.delete(triangle.max)**2	
 
+#Присваиваем переменной 
+summa_kvadratov_katetov = triangle.collect! {|i| i**2}.sum
 
+#Проверяем является ли треугольник прямоугольным по теореме пифагора												
+puts gipotenuza == summa_kvadratov_katetov ? "Треугольник прямоугольный" : "Треугольник не прямоугольный"
 
 
 =begin
