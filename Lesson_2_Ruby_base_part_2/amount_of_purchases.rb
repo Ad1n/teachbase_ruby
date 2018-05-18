@@ -8,17 +8,17 @@ loop do
   puts "Введите цену единицы товара :"
   price_for_one = gets.chomp.to_f
   puts "Введите количество товара :"
-  kolvo = gets.chomp.to_i
+  count = gets.chomp.to_i
 
-  shop[name] = { price: price_for_one, kolichestvo: kolvo }
+  shop[name] = { price: price_for_one, count: count }
 end
 # Создаем переменную для общей суммы по покупке
-itogo = 0
+total = 0
 # Выводим данные о каждом товаре
 shop.each do |k, v|
-  sum = v[:price] * v[:kolichestvo]
+  sum = v[:price] * v[:count]
   puts "Наименование товара: #{k}.  Итого за товар: #{sum} "
-  itogo += sum
+  total += sum
 end
 # Выводим общую сумму
-puts "Итого: #{itogo}"
+puts "Итого: #{total}"

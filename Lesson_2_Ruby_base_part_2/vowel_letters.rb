@@ -8,8 +8,8 @@ letters.each do |i|
   alphabet[i] = letters.find_index(i) + 1
 end
 # Перебираем хэш и выводим только гласные буквы
-alphabet.each_key do |l|
-  if vowels.include?(l)
-    puts "#{l} - #{alphabet.fetch(l)}"
+alphabet.each do |k, v|
+  if vowels.include?(k)
+    puts "#{k} - #{v}"
   end
 end
