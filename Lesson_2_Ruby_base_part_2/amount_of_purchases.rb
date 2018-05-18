@@ -1,0 +1,24 @@
+# Создаем хэш для занесения товаров
+shop = {}
+# Заносим в хэш товары до команды "стоп"
+loop do
+  puts "Введите наименование товара. Для остановки ввода введите 'стоп' :"
+  name = gets.chomp
+  break if name == 'стоп'
+  puts "Введите цену единицы товара :"
+  price_for_one = gets.chomp.to_f
+  puts "Введите количество товара :"
+  kolvo = gets.chomp.to_i
+
+  shop[name] = { price: price_for_one, kolichestvo: kolvo }
+end
+# Создаем переменную для общей суммы по покупке
+itogo = 0
+# Выводим данные о каждом товаре
+shop.each do |k, v|
+  sum = v[:price] * v[:kolichestvo]
+  puts "Наименование товара: #{k}.  Итого за товар: #{sum} "
+  itogo += sum
+end
+# Выводим общую сумму
+puts "Итого: #{itogo}"
