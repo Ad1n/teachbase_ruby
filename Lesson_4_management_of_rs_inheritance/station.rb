@@ -1,7 +1,6 @@
 class Station
 
-  attr_reader :trains, :station_name
-
+  attr_accessor :trains, :station_name, :trains_at_station_by_type
 
   def initialize(station_name)
     @station_name = station_name
@@ -17,18 +16,11 @@ class Station
     trains.delete(train)
   end
 
-  def trains_at_station_by_type
-    passenger = trains.reduce(0) { |count, train| train.type == :passenger ? count + 1 : count }
-    cargo = trains.select { |t| t.type == :cargo }.reduce(&:+)
-    trains_at_station_by_type[:passenger] = passenger
-    trains_at_station_by_type[:cargo] = cargo
-    trains_at_station_by_type
+  def trains_at_station_by_type(type = nil)
+    if type.nil?
+      @trains_at_station_by_type.count
+    else
+      @trains_at_station_by_type[type.to_sym] = trains.reduce(0) { |count, train| train.type == type.to_sym ? count + 1 : count }
+    end
   end
-
-  private
-
-  # Запрет на изменение состава поездов на станции , а также на изменение имени станции
-  # В секции private так как не планируется наследников данного класса
-  attr_writer :trains, :station_name
-
 end

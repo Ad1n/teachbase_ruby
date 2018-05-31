@@ -1,6 +1,7 @@
 class Route
 
-  attr_reader :stations, :starting_station, :end_station
+  attr_accessor :stations
+  attr_reader :starting_station, :end_station
 
   def initialize(starting_station, end_station)
     @starting_station = starting_station
@@ -22,9 +23,4 @@ class Route
     end
   end
 
-  private
-
-  # Доступ к изменению состава станций маршрута закрыт для пользователя
-  # Сеттер находится в секции private так как не планируется наследников данного класса
-  attr_writer :stations
 end
