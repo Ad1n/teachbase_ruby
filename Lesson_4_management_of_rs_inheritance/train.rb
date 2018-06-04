@@ -1,12 +1,23 @@
 class Train
 
-  attr_accessor :speed, :wagons
+  include Manufacturer
+  include InstanceCounter
+
+  attr_accessor :speed, :wagons, :train_manufacturer
   attr_reader :route, :number, :speed
+
+  class << self
+    def find(number)
+      Rzd.all_tr.detect { |v| v.number == number.to_s }
+    end
+  end
 
   def initialize(number)
     @number = number
     @wagons = []
     @speed = 0
+    create_manufacturer
+    register_instance
   end
 
   def current_station

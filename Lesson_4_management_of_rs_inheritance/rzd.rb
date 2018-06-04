@@ -1,6 +1,14 @@
 class Rzd
 
-  attr_accessor :all_stations, :all_trains, :all_routes
+
+  @all_st = []
+  @all_tr = []
+
+  class << self
+    attr_accessor :all_st, :all_tr
+  end
+
+  attr_reader :all_trains, :all_routes, :all_stations
 
   def initialize
     @all_stations = []
@@ -46,22 +54,22 @@ class Rzd
   end
 
   # Помещены методы не относящиеся к интерфейсу пользователя
-  protected
+  private
 
   def main_menu
     p 'Choose action: '
     p "Type '1' if u want to create station"
-    p "Type '12' if u want to see all trains in some station" if all_stations.count != 0
+    p "Type '12' if u want to see all trains in some station" if all_stations.any?
     p "Type '2' if u want to create train"
-    p "Type '9' if u want to move forward" if all_routes.count != 0 && all_trains.count != 0
-    p "Type '10' if u want to move backward" if all_routes.count != 0 && all_trains.count != 0
-    p "Type '7' if u want to attach wagon to train" if all_trains.count != 0
-    p "Type '8' if u want to detach wagon from train" if all_trains.count != 0
+    p "Type '9' if u want to move forward" if all_routes.any? && all_trains.any?
+    p "Type '10' if u want to move backward" if all_routes.any? && all_trains.any?
+    p "Type '7' if u want to attach wagon to train" if all_trains.any?
+    p "Type '8' if u want to detach wagon from train" if all_trains.any?
     p "Type '3' if u want to create route" if all_stations.count >= 2
-    p "Type '4' if u want to add station to the route" if all_routes.count != 0
-    p "Type '11' if u want to see list of all stations in some route" if all_routes.count != 0
-    p "Type '5' if u want to delete station from the route" if all_routes.count != 0
-    p "Type '6' if u want to attach route to the train" if all_routes.count != 0 && all_trains.count != 0
+    p "Type '4' if u want to add station to the route" if all_routes.any?
+    p "Type '11' if u want to see list of all stations in some route" if all_routes.any?
+    p "Type '5' if u want to delete station from the route" if all_routes.any?
+    p "Type '6' if u want to attach route to the train" if all_routes.any? && all_trains.any?
     p "Type '0' to exit program"
     gets.chomp!.to_i
   end
@@ -70,8 +78,9 @@ class Rzd
     print 'Type name of the station: '
     station_name = gets.chomp!
     if station_name != ''
-      all_stations << Station.new(station_name)
-
+      new_st = Station.new(station_name)
+      all_stations << new_st
+      self.class.all_st << new_st
       p 'Station succesfully created'
     else
       p 'Print station name again !'
@@ -87,6 +96,7 @@ class Rzd
     when type_of_train == :passenger
       new_train = PassengerTrain.new(number_of_train)
       all_trains << new_train
+      self.class.all_tr << new_train
       p "Succesfully created #{type_of_train} train №:  #{number_of_train}"
       new_wagon = PassengerWagon.new
       new_train.attach_wagon(new_wagon)
@@ -94,6 +104,7 @@ class Rzd
     when type_of_train == :cargo
       new_train = CargoTrain.new(number_of_train)
       all_trains << new_train
+      self.class.all_tr << new_train
       p "Succesfully created #{type_of_train} train №:  #{number_of_train}"
       new_wagon = CargoWagon.new
       new_train.attach_wagon(new_wagon)

@@ -1,12 +1,22 @@
 class Station
 
+  include InstanceCounter
+
+  class << self
+    def all_st
+      Rzd.all_st
+    end
+  end
+
   attr_accessor :trains, :station_name, :trains_at_station_by_type
 
   def initialize(station_name)
     @station_name = station_name
     @trains = []
     @trains_at_station_by_type = {}
+    register_instance
   end
+
 
   def train_arrival(train)
     trains << train
@@ -17,7 +27,7 @@ class Station
   end
 
   def trains_at_station_by_type(type = nil)
-    if type.nil?
+    if type
       @trains_at_station_by_type.count
     else
       @trains_at_station_by_type[type.to_sym] = trains.reduce(0) { |count, train| train.type == type.to_sym ? count + 1 : count }

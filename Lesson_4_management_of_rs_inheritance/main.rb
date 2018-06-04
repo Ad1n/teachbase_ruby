@@ -1,4 +1,6 @@
 # Точка входа в приложение
+require_relative 'instance_counter'
+require_relative 'manufacturer'
 require_relative 'rzd'
 require_relative 'train'
 require_relative 'wagon'
@@ -15,3 +17,4 @@ p 'Welcome to RailRoad Management v2.0'
 @rzd.start
 
 p 'See u!'
+

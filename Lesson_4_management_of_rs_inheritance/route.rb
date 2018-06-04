@@ -1,5 +1,7 @@
 class Route
 
+  include InstanceCounter
+
   attr_accessor :stations
   attr_reader :starting_station, :end_station
 
@@ -7,6 +9,7 @@ class Route
     @starting_station = starting_station
     @end_station = end_station
     @stations = [starting_station, end_station]
+    register_instance
   end
 
   def add_route_station(station, pos)
