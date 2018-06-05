@@ -2,19 +2,20 @@ class Station
 
   include InstanceCounter
 
-  class << self
-    attr_accessor :storage_stations
+  def self.storage_stations
+    @@storage_stations
   end
 
   attr_accessor :trains, :station_name, :trains_at_station_by_type
+
+  @@storage_stations = []
 
   def initialize(station_name)
     @station_name = station_name
     @trains = []
     @trains_at_station_by_type = {}
     register_instance
-    self.class.storage_stations ||= []
-    self.class.storage_stations << self
+    @@storage_stations << self
   end
 
 

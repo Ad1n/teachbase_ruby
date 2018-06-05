@@ -1,13 +1,5 @@
 class Rzd
 
-
-  # @storage_all_stations = []
-  # @storage_all_trains = []
-  #
-  # class << self
-  #   attr_accessor :storage_all_stations, :storage_all_trains
-  # end
-
   attr_reader :all_trains, :all_routes, :all_stations
 
   def initialize
@@ -80,7 +72,7 @@ class Rzd
     if station_name != ''
       new_st = Station.new(station_name)
       all_stations << new_st
-      Station.storage_stations << new_st
+      # Station.storage_stations << new_st
       p 'Station succesfully created'
     else
       p 'Print station name again !'
@@ -96,7 +88,6 @@ class Rzd
     when type_of_train == :passenger
       new_train = PassengerTrain.new(number_of_train)
       all_trains << new_train
-      # self.class.storage_all_trains << new_train
       print 'Enter passenger train manufacturer: '
       new_train.manufacturer = gets.chomp!
       p "Succesfully created #{type_of_train} train №:  #{number_of_train}"
@@ -108,7 +99,6 @@ class Rzd
     when type_of_train == :cargo
       new_train = CargoTrain.new(number_of_train)
       all_trains << new_train
-      # self.class.storage_all_trains << new_train
       print 'Enter cargo train manufacturer: '
       new_train.manufacturer = gets.chomp!
       p "Succesfully created #{type_of_train} train №:  #{number_of_train}"

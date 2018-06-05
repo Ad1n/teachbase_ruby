@@ -6,21 +6,18 @@ class Train
   attr_accessor :speed, :wagons, :train_manufacturer
   attr_reader :route, :number, :speed
 
-  class << self
-    attr_accessor :storage_trains
-
-    def find(number)
-      storage_trains.select { |hash| hash[number.to_s] }
-    end
+  def self.find(number)
+    @@storage_trains[number.to_s]
   end
+
+  @@storage_trains = {}
 
   def initialize(number)
     @number = number
     @wagons = []
     @speed = 0
     register_instance
-    self.class.storage_trains ||= {}
-    self.class.storage_trains[self.number] = self
+    @@storage_trains[self.number] = self
   end
 
   def current_station
