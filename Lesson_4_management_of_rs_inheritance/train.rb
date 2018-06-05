@@ -7,8 +7,10 @@ class Train
   attr_reader :route, :number, :speed
 
   class << self
+    attr_accessor :storage_trains
+
     def find(number)
-      Rzd.all_tr.detect { |v| v.number == number.to_s }
+      storage_trains.select { |hash| hash[number.to_s] }
     end
   end
 
@@ -16,8 +18,9 @@ class Train
     @number = number
     @wagons = []
     @speed = 0
-    create_manufacturer
     register_instance
+    self.class.storage_trains ||= {}
+    self.class.storage_trains[self.number] = self
   end
 
   def current_station

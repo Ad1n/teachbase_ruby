@@ -3,9 +3,7 @@ class Station
   include InstanceCounter
 
   class << self
-    def all_st
-      Rzd.all_st
-    end
+    attr_accessor :storage_stations
   end
 
   attr_accessor :trains, :station_name, :trains_at_station_by_type
@@ -15,6 +13,8 @@ class Station
     @trains = []
     @trains_at_station_by_type = {}
     register_instance
+    self.class.storage_stations ||= []
+    self.class.storage_stations << self
   end
 
 

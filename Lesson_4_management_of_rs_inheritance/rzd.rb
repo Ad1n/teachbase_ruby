@@ -1,12 +1,12 @@
 class Rzd
 
 
-  @all_st = []
-  @all_tr = []
-
-  class << self
-    attr_accessor :all_st, :all_tr
-  end
+  # @storage_all_stations = []
+  # @storage_all_trains = []
+  #
+  # class << self
+  #   attr_accessor :storage_all_stations, :storage_all_trains
+  # end
 
   attr_reader :all_trains, :all_routes, :all_stations
 
@@ -80,7 +80,7 @@ class Rzd
     if station_name != ''
       new_st = Station.new(station_name)
       all_stations << new_st
-      self.class.all_st << new_st
+      Station.storage_stations << new_st
       p 'Station succesfully created'
     else
       p 'Print station name again !'
@@ -96,17 +96,25 @@ class Rzd
     when type_of_train == :passenger
       new_train = PassengerTrain.new(number_of_train)
       all_trains << new_train
-      self.class.all_tr << new_train
+      # self.class.storage_all_trains << new_train
+      print 'Enter passenger train manufacturer: '
+      new_train.manufacturer = gets.chomp!
       p "Succesfully created #{type_of_train} train №:  #{number_of_train}"
       new_wagon = PassengerWagon.new
+      print 'Enter passenger wagon manufacturer: '
+      new_wagon.manufacturer = gets.chomp!
       new_train.attach_wagon(new_wagon)
       p "Succesfully added passenger wagon №: #{new_wagon.wagon_number}"
     when type_of_train == :cargo
       new_train = CargoTrain.new(number_of_train)
       all_trains << new_train
-      self.class.all_tr << new_train
+      # self.class.storage_all_trains << new_train
+      print 'Enter cargo train manufacturer: '
+      new_train.manufacturer = gets.chomp!
       p "Succesfully created #{type_of_train} train №:  #{number_of_train}"
       new_wagon = CargoWagon.new
+      print 'Enter cargo wagon manufacturer: '
+      new_wagon.manufacturer = gets.chomp!
       new_train.attach_wagon(new_wagon)
       p "Succesfully added passenger wagon №: #{new_wagon.wagon_number}"
     else

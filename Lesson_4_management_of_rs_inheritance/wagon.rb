@@ -6,7 +6,7 @@ class Wagon
   def initialize
     p 'Enter wagon number: '
     @wagon_number = gets.chomp!.to_i
-    create_manufacturer
+    # create_manufacturer
   end
 
 end

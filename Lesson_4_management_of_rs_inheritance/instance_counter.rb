@@ -1,5 +1,4 @@
 module InstanceCounter
-  @instances = 0
 
   def self.included(base)
     base.extend ClassMethods
@@ -14,7 +13,8 @@ module InstanceCounter
     private
 
     def register_instance
-      self.class.instances.nil? ? self.class.instances = 1 : self.class.instances += 1
+      self.class.instances ||= 0
+      self.class.instances.zero? ? self.class.instances = 1 : self.class.instances += 1
     end
   end
 end
