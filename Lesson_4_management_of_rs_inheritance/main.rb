@@ -1,4 +1,5 @@
 # Точка входа в приложение
+require_relative 'validation'
 require_relative 'instance_counter'
 require_relative 'manufacturer'
 require_relative 'rzd'

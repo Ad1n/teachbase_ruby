@@ -1,6 +1,7 @@
 class Route
 
   include InstanceCounter
+  include Validation
 
   attr_accessor :stations
   attr_reader :starting_station, :end_station
@@ -9,6 +10,7 @@ class Route
     @starting_station = starting_station
     @end_station = end_station
     @stations = [starting_station, end_station]
+    validate!
     register_instance
   end
 
@@ -26,4 +28,11 @@ class Route
     end
   end
 
+  private
+
+  def validate!
+    raise 'Please type starting station correct' if starting_station.nil?
+    raise 'Please type end station correct' if end_station.nil?
+    true
+  end
 end

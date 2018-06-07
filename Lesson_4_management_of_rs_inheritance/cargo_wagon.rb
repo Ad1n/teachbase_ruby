@@ -2,7 +2,7 @@ class CargoWagon < Wagon
 
   attr_reader :type_wagon
 
-  def initialize
+  def initialize(wagon_number)
     super
     @type_wagon = :cargo
   end

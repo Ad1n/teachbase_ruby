@@ -2,9 +2,12 @@ class Train
 
   include Manufacturer
   include InstanceCounter
+  include Validation
 
-  attr_accessor :speed, :wagons, :train_manufacturer
+  attr_accessor :wagons
   attr_reader :route, :number, :speed
+
+  TRAIN_NUMBER = /^([1-9]{3}||[a-z]{3})\-?([1-9]{2}||[a-z]{2})$/i
 
   def self.find(number)
     @@storage_trains[number.to_s]
@@ -16,6 +19,7 @@ class Train
     @number = number
     @wagons = []
     @speed = 0
+    validate!
     register_instance
     @@storage_trains[self.number] = self
   end
@@ -59,6 +63,17 @@ class Train
   def route=(route)
     @route = route
     self.route.starting_station.trains << self
+  end
+
+  protected
+
+  def validate!
+    raise "Wrong number #{number}" if number !~ TRAIN_NUMBER
+    raise 'Number is empty!' if number.empty?
+    raise "Wrong parameter of speed: #{speed}" if speed.nil?
+    raise "Speed can't be negative: #{speed}" if speed < 0
+    raise "OMG! To fast to furious: #{speed}. Max speed 120." if speed > 120
+    true
   end
 
 end
