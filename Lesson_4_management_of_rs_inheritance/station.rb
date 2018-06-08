@@ -8,6 +8,7 @@ class Station
   end
 
   attr_accessor :trains, :station_name
+  attr_reader :block
 
   @@storage_stations = []
 
@@ -18,6 +19,12 @@ class Station
     @trains_at_station_by_type = {}
     register_instance
     @@storage_stations << self
+  end
+
+  def list_of_trains(block)
+    trains.each do |train|
+      block.call(train)
+    end
   end
 
   def train_arrival(train)

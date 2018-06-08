@@ -5,7 +5,7 @@ class Train
   include Validation
 
   attr_accessor :wagons
-  attr_reader :route, :number, :speed
+  attr_reader :route, :number, :speed, :block
 
   TRAIN_NUMBER = /^([1-9]{3}||[a-z]{3})\-?([1-9]{2}||[a-z]{2})$/i
 
@@ -22,6 +22,12 @@ class Train
     validate!
     register_instance
     @@storage_trains[self.number] = self
+  end
+
+  def list_of_wagons(block)
+    wagons.each do |wagon|
+      block.call(wagon)
+    end
   end
 
   def current_station

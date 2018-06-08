@@ -36,6 +36,12 @@ class Rzd
         all_stations_list
       when name == 12
         all_trains_in_station
+      when name == 13
+        p wagons_of_train
+      when name == 14
+        p trains_of_station
+      when name == 15
+        seat_or_load_wagon
       end
     end while name != 0
 
@@ -51,8 +57,11 @@ class Rzd
   def main_menu
     p 'Choose action: '
     p "Type '1' if u want to create station"
+    p "Type '14' if u want to see all trains in station u choose (Block Edition)" if all_stations.any?
     p "Type '12' if u want to see all trains in some station" if all_stations.any?
     p "Type '2' if u want to create train"
+    p "Type '15' to take a seat / load in wagon u choose" if all_trains.any?
+    p "Type '13' if u want to see wagons of train u choose" if all_trains.any?
     p "Type '9' if u want to move forward" if all_routes.any? && all_trains.any?
     p "Type '10' if u want to move backward" if all_routes.any? && all_trains.any?
     p "Type '7' if u want to attach wagon to train" if all_trains.any?
@@ -78,6 +87,14 @@ class Rzd
     end
   end
 
+  def trains_of_station
+    show_all_stations
+    print 'Choose station first: '
+    station = gets.chomp.to_i
+    block = ->(station) { station }
+    all_stations[station].list_of_trains(block)
+  end
+
   def add_train
     begin
       print 'Choose type of train between "passenger" and "cargo": '
@@ -89,7 +106,9 @@ class Rzd
         new_train = PassengerTrain.new(number_of_train)
         p 'Enter passenger wagon number: '
         wagon_number = gets.chomp!.to_i
-        new_wagon = PassengerWagon.new(wagon_number)
+        print 'Enter total capacity of passenger wagon: '
+        total_seats = gets.chomp!.to_i
+        new_wagon = PassengerWagon.new(wagon_number, total_seats)
         all_trains << new_train
         print 'Enter passenger train manufacturer: '
         new_train.manufacturer = gets.chomp!
@@ -102,7 +121,9 @@ class Rzd
         new_train = CargoTrain.new(number_of_train)
         p 'Enter cargo wagon number: '
         wagon_number = gets.chomp!.to_i
-        new_wagon = CargoWagon.new(wagon_number)
+        print 'Enter total capacity of cargo wagon: '
+        total_volume = gets.chomp!.to_i
+        new_wagon = CargoWagon.new(wagon_number, total_volume)
         all_trains << new_train
         print 'Enter cargo train manufacturer: '
         new_train.manufacturer = gets.chomp!
@@ -118,6 +139,34 @@ class Rzd
       p e.inspect
       retry
     end
+  end
+
+  def seat_or_load_wagon
+    show_all_trains
+    print 'Choose train first: '
+    train = gets.chomp!.to_i
+    all_trains[train].wagons.each_with_index { |w, index| p "#{index}:  № #{ w.wagon_number}" }
+    print 'Type wagon index please: '
+    wagon_index = gets.chomp!.to_i
+    case
+    when all_trains[train].type == :cargo
+      print 'Type value of load volume: '
+      volume = gets.chomp!.to_i
+      all_trains[train].wagons[wagon_index].load_wagon(volume)
+      p "Succesfully loaded! Volume free: #{all_trains[train].wagons[wagon_index].total_free_volume} "
+    when all_trains[train].type == :passenger
+      all_trains[train].wagons[wagon_index].take_seat
+      p "Succesfully took! Free seats in wagon: #{all_trains[train].wagons[wagon_index].total_free_seats}"
+    end
+
+  end
+
+  def wagons_of_train
+    show_all_trains
+    print 'Choose train first: '
+    train = gets.chomp.to_i
+    block = ->(wagon) { wagon }
+    all_trains[train].list_of_wagons(block)
   end
 
   def create_route
@@ -144,7 +193,7 @@ class Rzd
   end
 
   def show_all_stations
-      all_stations.each_with_index { |val, index| p "#{index}: #{val.station_name}" }
+    all_stations.each_with_index { |val, index| p "#{index}: #{val.station_name}" }
   end
 
   def show_station_trains(station_choice)
@@ -152,7 +201,7 @@ class Rzd
   end
 
   def show_all_trains
-    all_trains.each_with_index { |val, index| p "#{index}: #{val.number}" }
+    all_trains.each_with_index { |val, index| p "#{index}: #{val.number}  #{val.type}" }
   end
 
   def add_station_to_route
@@ -222,9 +271,13 @@ class Rzd
     train_choice = gets.chomp!.to_i
     p 'Enter type of wagon: '
     wagon_choice = gets.chomp!.to_sym
+    print 'Type number of the wagon: '
+    number_of_wagon = gets.chomp!.to_i
     case
     when wagon_choice == :passenger
-      new_wagon = PassengerWagon.new
+      print 'Enter total capacity of passenger wagon: '
+      total_seats = gets.chomp!.to_i
+      new_wagon = PassengerWagon.new(number_of_wagon, total_seats)
       if new_wagon.type_wagon == all_trains[train_choice].type
         all_trains[train_choice].attach_wagon(new_wagon)
         p "Succesfully added #{wagon_choice} wagon №: #{new_wagon.wagon_number}"
@@ -232,7 +285,9 @@ class Rzd
         p "Type error"
       end
     when wagon_choice == :cargo
-      new_wagon = CargoWagon.new
+      print 'Enter total capacity of cargo wagon: '
+      total_volume = gets.chomp!.to_i
+      new_wagon = CargoWagon.new(number_of_wagon, total_volume)
       if new_wagon.type_wagon == all_trains[train_choice].type
         all_trains[train_choice].attach_wagon(new_wagon)
         p "Succesfully added #{wagon_choice} wagon №: #{new_wagon.wagon_number}"

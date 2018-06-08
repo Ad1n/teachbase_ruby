@@ -6,7 +6,7 @@ class Wagon
 
   WAGON_NUMBER = /^[1-9]{1,2}$/
 
-  def initialize(wagon_number)
+  def initialize(wagon_number, _)
     @wagon_number = wagon_number
     validate!
   end
