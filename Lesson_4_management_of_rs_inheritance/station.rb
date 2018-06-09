@@ -8,7 +8,6 @@ class Station
   end
 
   attr_accessor :trains, :station_name
-  attr_reader :block
 
   @@storage_stations = []
 

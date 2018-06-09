@@ -5,7 +5,7 @@ class Train
   include Validation
 
   attr_accessor :wagons
-  attr_reader :route, :number, :speed, :block
+  attr_reader :route, :number, :speed
 
   TRAIN_NUMBER = /^([1-9]{3}||[a-z]{3})\-?([1-9]{2}||[a-z]{2})$/i
 
