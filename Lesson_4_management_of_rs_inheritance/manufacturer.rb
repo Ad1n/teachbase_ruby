@@ -1,5 +1,7 @@
 module Manufacturer
+
   include Validation
+
   attr_reader :manufacturer
 
   def manufacturer=(manufacturer)

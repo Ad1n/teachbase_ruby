@@ -3,11 +3,11 @@ class Station
   include InstanceCounter
   include Validation
 
+  attr_accessor :trains, :station_name
+
   def self.storage_stations
     @@storage_stations
   end
-
-  attr_accessor :trains, :station_name
 
   @@storage_stations = []
 
