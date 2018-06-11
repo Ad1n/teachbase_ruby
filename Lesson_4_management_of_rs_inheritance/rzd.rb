@@ -1,5 +1,4 @@
 class Rzd
-
   attr_reader :all_trains, :all_routes, :all_stations
 
   def initialize
@@ -9,7 +8,7 @@ class Rzd
   end
 
   def start
-    begin
+    loop do
       name = main_menu
       case
       when name == 1
@@ -42,16 +41,17 @@ class Rzd
         p trains_of_station
       when name == 15
         seat_or_load_wagon
+      else
+        break
       end
-    end while name != 0
+    end
 
-    # Для проверки
+    # For check the data
     p all_trains
     p all_stations
     p all_routes
   end
 
-  # Помещены методы не относящиеся к интерфейсу пользователя
   private
 
   def main_menu
@@ -89,7 +89,7 @@ class Rzd
     show_all_stations
     print 'Choose station first: '
     station = gets.chomp.to_i
-    block = ->(station) { station }
+    block = ->(station_each) { station_each }
     all_stations[station].list_of_trains(block)
   end
 
@@ -98,8 +98,7 @@ class Rzd
     type_of_train = gets.chomp!.to_sym
     print 'Type number of the train: '
     number_of_train = gets.chomp!
-    case
-    when type_of_train == :passenger
+    if type_of_train == :passenger
       new_train = PassengerTrain.new(number_of_train)
       p 'Enter passenger wagon number: '
       wagon_number = gets.chomp!.to_i
@@ -114,7 +113,7 @@ class Rzd
       new_wagon.manufacturer = gets.chomp!
       new_train.attach_wagon(new_wagon)
       p "Succesfully added passenger wagon №: #{new_wagon.wagon_number}"
-    when type_of_train == :cargo
+    elsif type_of_train == :cargo
       new_train = CargoTrain.new(number_of_train)
       p 'Enter cargo wagon number: '
       wagon_number = gets.chomp!.to_i
@@ -141,20 +140,18 @@ class Rzd
     show_all_trains
     print 'Choose train first: '
     train = gets.chomp!.to_i
-    all_trains[train].wagons.each_with_index { |w, index| p "#{index}:  № #{ w.wagon_number}" }
+    all_trains[train].wagons.each_with_index { |w, index| p "#{index}:  № #{w.wagon_number}" }
     print 'Type wagon index please: '
     wagon_index = gets.chomp!.to_i
-    case
-    when all_trains[train].type == :cargo
+    if all_trains[train].type == :cargo
       print 'Type value of load volume: '
       volume = gets.chomp!.to_i
       all_trains[train].wagons[wagon_index].load_wagon(volume)
       p "Succesfully loaded! Volume free: #{all_trains[train].wagons[wagon_index].total_free_volume} "
-    when all_trains[train].type == :passenger
+    elsif all_trains[train].type == :passenger
       all_trains[train].wagons[wagon_index].take_seat
       p "Succesfully took! Free seats in wagon: #{all_trains[train].wagons[wagon_index].total_free_seats}"
     end
-
   end
 
   def wagons_of_train
@@ -178,8 +175,10 @@ class Rzd
   end
 
   def show_all_routes
-    all_routes.each_with_index { |val, index| p "#{index}: Start at: #{val.starting_station.station_name}." +
-                                 "  Finish: #{val.end_station.station_name}" }
+    all_routes.each_with_index do |val, index|
+      p "#{index}: Start at: #{val.starting_station.station_name}." \
+                                                "  Finish: #{val.end_station.station_name}"
+    end
   end
 
   def show_route_stations(route_choice)
@@ -267,8 +266,7 @@ class Rzd
     wagon_choice = gets.chomp!.to_sym
     print 'Type number of the wagon: '
     number_of_wagon = gets.chomp!.to_i
-    case
-    when wagon_choice == :passenger
+    if wagon_choice == :passenger
       print 'Enter total capacity of passenger wagon: '
       total_seats = gets.chomp!.to_i
       new_wagon = PassengerWagon.new(number_of_wagon, total_seats)
@@ -276,9 +274,9 @@ class Rzd
         all_trains[train_choice].attach_wagon(new_wagon)
         p "Succesfully added #{wagon_choice} wagon №: #{new_wagon.wagon_number}"
       else
-        p "Type error"
+        p 'Type error'
       end
-    when wagon_choice == :cargo
+    elsif wagon_choice == :cargo
       print 'Enter total capacity of cargo wagon: '
       total_volume = gets.chomp!.to_i
       new_wagon = CargoWagon.new(number_of_wagon, total_volume)
@@ -286,7 +284,7 @@ class Rzd
         all_trains[train_choice].attach_wagon(new_wagon)
         p "Succesfully added #{wagon_choice} wagon №: #{new_wagon.wagon_number}"
       else
-        p "Type error"
+        p 'Type error'
       end
     else
       p "Wrong parameters #{wagon_choice}"

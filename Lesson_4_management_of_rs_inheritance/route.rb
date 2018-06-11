@@ -1,5 +1,4 @@
 class Route
-
   include InstanceCounter
   include Validation
 

@@ -1,5 +1,4 @@
 class CargoWagon < Wagon
-
   attr_reader :type_wagon, :total_volume, :wagon_number
   attr_accessor :total_load_volume
 
@@ -7,9 +6,7 @@ class CargoWagon < Wagon
     @wagon_number = wagon_number
     validate!
     @type_wagon = :cargo
-    # Вместимость вагона
     @total_volume = total_wagon_volume
-    # Занятый объем в вагоне
     @total_load_volume = 0
   end
 

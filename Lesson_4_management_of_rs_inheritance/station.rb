@@ -1,5 +1,4 @@
 class Station
-
   include InstanceCounter
   include Validation
 

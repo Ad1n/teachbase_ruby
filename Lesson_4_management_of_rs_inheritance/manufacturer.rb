@@ -1,5 +1,4 @@
 module Manufacturer
-
   include Validation
 
   attr_reader :manufacturer

@@ -1,5 +1,4 @@
 class Train
-
   include Manufacturer
   include InstanceCounter
   include Validation
@@ -81,5 +80,4 @@ class Train
     raise "OMG! To fast to furious: #{speed}. Max speed 120." if speed > 120
     true
   end
-
 end

@@ -1,4 +1,4 @@
-# Точка входа в приложение
+# App entry point
 require_relative 'validation'
 require_relative 'instance_counter'
 require_relative 'manufacturer'
@@ -18,4 +18,3 @@ p 'Welcome to RailRoad Management v2.0'
 @rzd.start
 
 p 'See u!'
-

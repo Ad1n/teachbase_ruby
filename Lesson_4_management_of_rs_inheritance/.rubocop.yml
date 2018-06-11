@@ -1,0 +1,46 @@
+Metrics/ClassLength:
+  Max: 340
+
+Metrics/AbcSize:
+  Max: 60
+
+Metrics/CyclomaticComplexity:
+  Max: 17
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/PerceivedComplexity:
+  Max: 17
+
+Style/ClassVars:
+  Exclude:
+    - 'station.rb'
+    - 'train.rb'
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'cargo_train.rb'
+    - 'cargo_wagon.rb'
+    - 'instance_counter.rb'
+    - 'manufacturer.rb'
+    - 'passenger_train.rb'
+    - 'passenger_wagon.rb'
+    - 'route.rb'
+    - 'rzd.rb'
+    - 'station.rb'
+    - 'train.rb'
+    - 'validation.rb'
+    - 'wagon.rb'
+
+Style/EmptyCaseCondition:
+  Exclude:
+    - 'rzd.rb'
+
+Metrics/LineLength:
+  Max: 130
+
+Metrics/BlockLength:
+  Max: 35

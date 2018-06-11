@@ -1,5 +1,4 @@
 class Wagon
-
   include Manufacturer
   include Validation
 
