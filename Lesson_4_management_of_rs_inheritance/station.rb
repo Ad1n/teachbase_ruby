@@ -3,6 +3,9 @@ class Station
   include Validation
 
   attr_accessor :trains, :station_name
+  validate :station_name, :presence
+  validate :station_name, :type, String
+
 
   def self.storage_stations
     @@storage_stations
@@ -39,14 +42,5 @@ class Station
     else
       @trains_at_station_by_type[type.to_sym] = trains.reduce(0) { |count, train| train.type == type.to_sym ? count + 1 : count }
     end
-  end
-
-  private
-
-  def validate!
-    raise 'Type station name please.' if station_name.empty?
-    raise "Too mach symbols in station name: #{station_name.length}" if station_name.length > 25
-    raise "Too small for station name: #{station_name.length}" if station_name.length < 2
-    true
   end
 end

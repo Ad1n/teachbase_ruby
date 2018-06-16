@@ -5,6 +5,11 @@ class Route
   attr_accessor :stations
   attr_reader :starting_station, :end_station
 
+  validate :starting_station, :presence
+  validate :end_station, :presence
+  validate :starting_station, :type, Station
+  validate :end_station, :type, Station
+
   def initialize(starting_station, end_station)
     @starting_station = starting_station
     @end_station = end_station
@@ -25,13 +30,5 @@ class Route
     stations.each_with_index do |k, i|
       "#{i}  #{k.station_name}"
     end
-  end
-
-  private
-
-  def validate!
-    raise 'Please type starting station correct' if starting_station.nil?
-    raise 'Please type end station correct' if end_station.nil?
-    true
   end
 end

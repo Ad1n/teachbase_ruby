@@ -1,5 +1,41 @@
+require_relative 'train'
 class Rzd
+  extend Accessors
   attr_reader :all_trains, :all_routes, :all_stations
+
+  # Example of using strong_attr_accessor
+  begin
+    strong_attr_accessor :var1, Train
+    instance_object = Rzd.new
+    p 'Try to put value in var1 with wrong class Train...'
+    instance_object.var1 = 3
+    p instance_object
+    strong_attr_accessor :var2, Rzd
+    p 'Now we put some value ( for example = 3) in var2 with correct class Rzd.'
+    instance_object.var2 = 3
+    p instance_object
+  rescue RuntimeError => e
+    p e.inspect
+  end
+  begin
+    strong_attr_accessor :var2, Rzd
+    p 'Now we put some value ( for example = 3) in var2 with correct class Rzd.'
+    instance_object.var2 = 3
+    p instance_object
+    p 'Correct!'
+  rescue RuntimeError => e
+    p e.inspect
+  end
+
+  # Example of using attr_accessor_with_history
+  attr_accessor_with_history :var1
+  instance_object = Rzd.new
+  p 'Try to assign values to var1 - at first value equals 2, then value 3.'
+  instance_object.var1 = 2
+  instance_object.var1 = 3
+  p 'Now lets see history of the value changes.'
+  p instance_object.var1_history
+
 
   def initialize
     @all_stations = []
@@ -78,6 +114,7 @@ class Rzd
   def add_station
     print 'Type name of the station: '
     station_name = gets.chomp!
+    p station_name.class
     new_st = Station.new(station_name)
     all_stations << new_st
     p 'Station succesfully created'
@@ -101,7 +138,7 @@ class Rzd
     if type_of_train == :passenger
       new_train = PassengerTrain.new(number_of_train)
       p 'Enter passenger wagon number: '
-      wagon_number = gets.chomp!.to_i
+      wagon_number = gets.chomp!
       print 'Enter total capacity of passenger wagon: '
       total_seats = gets.chomp!.to_i
       new_wagon = PassengerWagon.new(wagon_number, total_seats)
@@ -116,7 +153,7 @@ class Rzd
     elsif type_of_train == :cargo
       new_train = CargoTrain.new(number_of_train)
       p 'Enter cargo wagon number: '
-      wagon_number = gets.chomp!.to_i
+      wagon_number = gets.chomp!
       print 'Enter total capacity of cargo wagon: '
       total_volume = gets.chomp!.to_i
       new_wagon = CargoWagon.new(wagon_number, total_volume)
@@ -127,7 +164,7 @@ class Rzd
       print 'Enter cargo wagon manufacturer: '
       new_wagon.manufacturer = gets.chomp!
       new_train.attach_wagon(new_wagon)
-      p "Succesfully added passenger wagon №: #{new_wagon.wagon_number}"
+      p "Succesfully added cargo wagon №: #{new_wagon.wagon_number}"
     else
       p "Wrong type #{type_of_train}"
     end

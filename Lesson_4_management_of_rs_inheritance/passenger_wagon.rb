@@ -2,6 +2,9 @@ class PassengerWagon < Wagon
   attr_reader :type_wagon, :total_seats
   attr_accessor :total_take_seats
 
+  validate :wagon_number, :presence
+  validate :wagon_number, :format, /^[1-9]{1,2}$/
+
   def initialize(wagon_number, total_seats_number)
     @wagon_number = wagon_number
     validate!
