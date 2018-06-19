@@ -6,6 +6,8 @@ class Train
   attr_accessor :wagons
   attr_reader :route, :number, :speed
 
+  validate :number, :presence
+
   def self.find(number)
     @@storage_trains[number.to_s]
   end

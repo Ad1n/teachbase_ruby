@@ -3,6 +3,7 @@ class Station
   include Validation
 
   attr_accessor :trains, :station_name
+
   validate :station_name, :presence
   validate :station_name, :type, String
 

@@ -10,24 +10,7 @@ module Validation
     attr_accessor_with_history :validations
 
     def validate(*validation_args)
-      what_class = self.to_s.to_sym
-      self.validations = {} if self.validations.nil?
-      validations[what_class] = [] if validations[what_class].nil?
-      case
-      when validation_args[1] == :presence
-        validations[what_class] << :presence
-        validations[what_class] << validation_args[0]
-      when validation_args[1] == :type
-        validations[what_class] << :type
-        validations[what_class] << validation_args[0]
-        validations[what_class] << validation_args[2]
-      when validation_args[1] == :format
-        validations[what_class] << :format
-        validations[what_class] << validation_args[0]
-        validations[what_class] << validation_args[2]
-      else
-      "Wrong parameter: #{validation_args[1]}"
-      end
+      self.validations = [validation_args[0], validation_args[1], validation_args[2]]
     end
   end
 
@@ -39,35 +22,34 @@ module Validation
     end
 
     def validate!
-      validate_params = self.class.validations
-      name_class = self.class.validations.keys.first
-      validate_params[name_class].each_with_index do |value, index|
+      validate_params = self.class.validations_history
+      validate_params.each do |v|
         case
-        when value == :presence
-          raise 'Type attribute name please.' if
-              instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym) == ""  \
-              || instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym).nil?
-
-        when value == :type
-          raise "Wrong type - #{instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym).class}" if
-              instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym).class != \
-              validate_params[name_class][index + 2]
-          raise "Wrong type !" if
-              validate_params[name_class][index + 2] == String &&
-              instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym).to_i.zero? == false &&
-              instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym).to_i.class != \
-              validate_params[name_class][index + 2]
-
-        when value == :format
-          regular_exp = validate_params[name_class][index + 2]
-          raise "Format error!" if instance_variable_get("@#{validate_params[name_class][index + 1]}".to_sym) !~ \
-          regular_exp
-
+        when respond_to?(v[0]) && v[1] == :presence
+          send :validate_presence!, v
+        when respond_to?(v[0]) && v[1] == :format
+          send :validate_format!, v
+        when respond_to?(v[0]) && v[1] == :type
+          send :validate_type!, v
         else
           next
         end
       end
       true
+    end
+
+    def validate_presence!(args)
+      raise "Can not be nil!" if instance_variable_get("@#{args[0]}".to_sym) == "" || \
+                                 instance_variable_get("@#{args[0]}".to_sym).nil?
+    end
+
+    def validate_format!(args)
+      regular_exp = args[2]
+      raise "Format error!" if instance_variable_get("@#{args[0].to_s}") !~ regular_exp
+    end
+
+    def validate_type!(args)
+      raise "Type Error!" if instance_variable_get("@#{args[0].to_s}").class != args[2]
     end
 
   end
