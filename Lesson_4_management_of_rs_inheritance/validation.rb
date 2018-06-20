@@ -10,7 +10,7 @@ module Validation
     attr_accessor_with_history :validations
 
     def validate(*validation_args)
-      self.validations = [validation_args[0], validation_args[1], validation_args[2]]
+      self.validations = { name: validation_args[0], type: validation_args[1], options: validation_args[2] }
     end
   end
 
@@ -25,12 +25,12 @@ module Validation
       validate_params = self.class.validations_history
       validate_params.each do |v|
         case
-        when respond_to?(v[0]) && v[1] == :presence
-          send :validate_presence!, v
-        when respond_to?(v[0]) && v[1] == :format
-          send :validate_format!, v
-        when respond_to?(v[0]) && v[1] == :type
-          send :validate_type!, v
+        when respond_to?(v[:name]) && v[:type] == :presence
+          send("validate_#{v[:type]}!".to_sym, instance_variable_get("@#{v[:name]}".to_sym), v[:options])
+        when respond_to?(v[:name]) && v[:type] == :format
+          send("validate_#{v[:type]}!".to_sym, instance_variable_get("@#{v[:name]}".to_sym), v[:options])
+        when respond_to?(v[:name]) && v[:type] == :type
+          send("validate_#{v[:type]}!".to_sym, instance_variable_get("@#{v[:name]}".to_sym), v[:options])
         else
           next
         end
@@ -38,18 +38,17 @@ module Validation
       true
     end
 
-    def validate_presence!(args)
-      raise "Can not be nil!" if instance_variable_get("@#{args[0]}".to_sym) == "" || \
-                                 instance_variable_get("@#{args[0]}".to_sym).nil?
+    def validate_presence!(*values)
+      raise "Can not be nil!" if values[0] == "" || values[0].nil?
     end
 
-    def validate_format!(args)
-      regular_exp = args[2]
-      raise "Format error!" if instance_variable_get("@#{args[0].to_s}") !~ regular_exp
+    def validate_format!(*values)
+      regular_exp = values[1]
+      raise "Format error!" if values[0] !~ regular_exp
     end
 
-    def validate_type!(args)
-      raise "Type Error!" if instance_variable_get("@#{args[0].to_s}").class != args[2]
+    def validate_type!(*values)
+      raise "Type Error!" if values[0] != values[1]
     end
 
   end
