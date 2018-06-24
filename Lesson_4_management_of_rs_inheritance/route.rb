@@ -5,16 +5,16 @@ class Route
   attr_accessor :stations
   attr_reader :starting_station, :end_station
 
-  validate :starting_station, :presence
-  validate :end_station, :presence
   validate :starting_station, :type, Station
   validate :end_station, :type, Station
+  validate :starting_station, :presence
+  validate :end_station, :presence
 
   def initialize(starting_station, end_station)
     @starting_station = starting_station
     @end_station = end_station
-    @stations = [starting_station, end_station]
     validate!
+    @stations = [starting_station, end_station]
     register_instance
   end
 

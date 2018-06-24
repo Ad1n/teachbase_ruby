@@ -114,7 +114,6 @@ class Rzd
   def add_station
     print 'Type name of the station: '
     station_name = gets.chomp!
-    p station_name.class
     new_st = Station.new(station_name)
     all_stations << new_st
     p 'Station succesfully created'
@@ -202,10 +201,14 @@ class Rzd
   def create_route
     show_all_stations
     print 'Type index of starting station: '
-    number_of_ss = gets.chomp!.to_i
+    number_of_ss = gets.chomp!
+    p all_stations[number_of_ss.to_i]
+    p number_of_ss.class
+
     print 'Type index of end station: '
-    number_of_es = gets.chomp!.to_i
-    all_routes << Route.new(all_stations[number_of_ss], all_stations[number_of_es])
+    number_of_es = gets.chomp!
+    new_route = Route.new(all_stations[number_of_ss.to_i], all_stations[number_of_es.to_i])
+    all_routes << new_route
     p 'Route succesfully created'
   rescue RuntimeError => e
     p e.inspect

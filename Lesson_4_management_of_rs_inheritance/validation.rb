@@ -23,13 +23,9 @@ module Validation
 
     def validate!
       validate_params = self.class.validations_history
+      p validate_params
       validate_params.each do |v|
-        case
-        when respond_to?(v[:name]) && v[:type] == :presence
-          send("validate_#{v[:type]}!".to_sym, instance_variable_get("@#{v[:name]}".to_sym), v[:options])
-        when respond_to?(v[:name]) && v[:type] == :format
-          send("validate_#{v[:type]}!".to_sym, instance_variable_get("@#{v[:name]}".to_sym), v[:options])
-        when respond_to?(v[:name]) && v[:type] == :type
+        if respond_to?("validate_#{v[:type]}!".to_sym) && !instance_variable_get("@#{v[:name]}".to_sym).nil?
           send("validate_#{v[:type]}!".to_sym, instance_variable_get("@#{v[:name]}".to_sym), v[:options])
         else
           next
@@ -38,17 +34,17 @@ module Validation
       true
     end
 
-    def validate_presence!(*values)
-      raise "Can not be nil!" if values[0] == "" || values[0].nil?
+    def validate_presence!(name, _options)
+      raise "Can not be nil!" if name == "" || name.nil?
     end
 
-    def validate_format!(*values)
-      regular_exp = values[1]
-      raise "Format error!" if values[0] !~ regular_exp
+    def validate_format!(name, options)
+      regular_exp = options
+      raise "Format error!" if name !~ regular_exp
     end
 
-    def validate_type!(*values)
-      raise "Type Error!" if values[0] != values[1]
+    def validate_type!(name, options)
+      raise "Type Error!" if name.class != options
     end
 
   end
